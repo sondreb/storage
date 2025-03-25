@@ -1,6 +1,6 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import { rateLimiter } from "../middleware/rateLimiter";
-import { TableStorageService } from "../services/tableStorageService";
+import { BlobStorageService } from "../services/blobStorageService";
 
 export async function persist(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     context.log(`Http function processed request for url "${request.url}"`);
@@ -36,15 +36,15 @@ export async function persist(request: HttpRequest, context: InvocationContext):
             };
         }
 
-        // Store the data in Azure Table Storage
-        const tableService = new TableStorageService();
-        const rowKey = await tableService.storeJsonData(jsonData);
+        // Store the data in Azure Blob Storage
+        const blobService = new BlobStorageService();
+        const blobId = await blobService.storeJsonData(jsonData);
 
         return {
             status: 201,
             jsonBody: {
                 success: true,
-                id: rowKey,
+                id: blobId,
                 message: "Data stored successfully"
             }
         };

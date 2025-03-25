@@ -3,8 +3,10 @@ Azure Function that persist incoming JSON data to Azure Blob Storage
 
 ## Features
 
-- Processes and validates JSON data before storing in Azure Table Storage
-- Uses "freeid" as PartitionKey and generates a unique UUID as RowKey
+- Processes and validates JSON data before storing in Azure Blob Storage
+- Supports large JSON files (over 1MB)
+- Stores blobs securely in a "freeid" folder with unique UUIDs as filenames
+- All blobs are stored with private access only - no public access allowed
 - Implements rate limiting (1 request per 2 seconds per IP address) to protect against DOS attacks
 - Responds with appropriate HTTP status codes and headers for rate limited requests
 
@@ -30,7 +32,11 @@ The API implements rate limiting to protect against denial of service attacks. E
 ```json
 {
   "success": true,
-  "id": "unique-row-key",
+  "id": "unique-blob-id",
   "message": "Data stored successfully"
 }
 ```
+
+## Security
+
+All blobs are stored with private access permissions. Access to the stored data requires appropriate Azure Storage authentication and authorization.
